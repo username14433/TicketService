@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Регистрация</title>
+</head>
+<body>
+<h2>Регистрация</h2>
+
+<form th:action="@{/register}" th:object="${registerDto}" th:method="POST">
+    <input type="hidden" th:name="${_csrf.getParameterName()}" th:value="${_csrf.getToken()}">
+
+    <label>Логин</label><br>
+    <input type="text" th:field="*{username}" required><br><br>
+
+    <label>Пароль</label><br>
+    <input type="password" th:field="*{password}" required><br><br>
+
+    <button type="submit">Зарегистрироваться</button>
+</form>
+
+<a th:href="@{/login}">Уже есть аккаунт? Войти</a>
+
+</body>
+</html>

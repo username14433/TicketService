@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Home Page</title>
+</head>
+<body>
+<h1>Hello from Ticket System</h1>
+
+<form th:action="@{/tickets}" th:method="POST">
+    <label>
+        Название
+        <input id="title"
+               name="title"
+               th:value="${title}"
+               type="text"
+               placeholder="Введите название"
+               required>
+    </label>
+
+    <label>
+        Описание
+        <input id="description"
+               name="description"
+               th:value="${description}"
+               type="text"
+               placeholder="Введите описание"
+               required>
+    </label>
+
+    <input id="createdBy"
+           name="createdBy"
+           th:value="${user.id}"
+           type="hidden">
+
+</form>
+
+</body>
+</html>

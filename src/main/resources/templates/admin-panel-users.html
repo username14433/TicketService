@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Panel</title>
+    <link rel="stylesheet" th:href="@{/css/admin-panel.css}">
+</head>
+<body>
+<h1>Welcome to admin panel!</h1>
+<div class="container">
+
+    <div class="header">
+        <h1>Пользователи</h1>
+        <a class="create-btn" th:href="@{/tickets}">Назад</a>
+    </div>
+
+    <div class="ticket-list">
+        <div class="ticket" th:each="user : ${users}">
+            <div class="user-username" th:text="${user.username}"></div>
+            <div class="user-role" th:text="${user.role}"></div>
+            <div class="user-meta">
+                <span th:text="${user.id}"></span>
+                <form th:action="@{/admin/users-list}" th:method="POST">
+                    <input th:value="${user.id}" name="id" type="hidden">
+                    <label>
+                        <select name="newRole">
+                            <option th:each="role: ${roles}"
+                                    th:value="${role}"
+                                    th:text="${role}"></option>
+                        </select>
+                    </label>
+                    <button type="submit">Изменить роль</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+</body>
+</html>
