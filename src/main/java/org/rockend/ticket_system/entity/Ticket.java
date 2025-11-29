@@ -32,7 +32,6 @@ public class Ticket {
     private LocalDateTime createdAt;
 
     @Column(name = "updated_at")
-    @LastModifiedDate
     private LocalDateTime updatedAt;
 
     @ManyToOne

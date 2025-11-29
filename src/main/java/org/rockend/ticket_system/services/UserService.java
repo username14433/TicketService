@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 @Service
+@Transactional
 public class UserService {
 
     UserRepository userRepository;
@@ -19,9 +20,12 @@ public class UserService {
         this.passwordEncoder = passwordEncoder;
     }
 
-    @Transactional
     public List<User> getAllUsers() {
         return userRepository.findAll(Sort.by(Sort.Direction.ASC, "id"));
+    }
+
+    public User getUserById(long id) {
+        return userRepository.findUserById(id);
     }
 
 }

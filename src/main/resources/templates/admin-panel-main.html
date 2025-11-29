@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Админ панель</title>
+    <link rel="stylesheet" th:href="@{/css/admin-panel-main.css}">
+</head>
+<body>
+
+<div class="container">
+
+    <div class="header">
+        <h1>Админ Панель</h1>
+        <div class="admin-info">
+            <span th:text="'Вы вошли как: ' + ${admin.username}"></span>
+            <span class="role-label" th:text="${admin.role}"></span>
+        </div>
+    </div>
+
+    <div class="stats-grid">
+        <div class="stat-card">
+            <div class="stat-value" th:text="${adminStatistics.usersCount}"></div>
+            <div class="stat-label">Пользователей</div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-value" th:text="${adminStatistics.activeTicketsCount}"></div>
+            <div class="stat-label">Активных тикетов</div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-value" th:text="${adminStatistics.doneTicketsCount}"></div>
+            <div class="stat-label">Выполнено</div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-value" th:text="${adminStatistics.unassignedTicketsCount}"></div>
+            <div class="stat-label">Не назначено</div>
+        </div>
+    </div>
+
+    <div class="actions">
+        <a class="action-btn" th:href="@{/admin/users-list}">Список пользователей</a>
+        <a class="action-btn" th:href="@{/admin/tickets-list}">Список тикетов</a>
+    </div>
+
+</div>
+
+</body>
+</html>

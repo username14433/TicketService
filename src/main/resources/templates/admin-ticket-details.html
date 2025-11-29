@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="'Тикет: ' + ${ticket.title}"></title>
+    <link rel="stylesheet" th:href="@{/css/admin-ticket-details.css}">
+</head>
+<body>
+
+<div class="container">
+
+    <div class="header">
+        <h1 th:text="${ticket.title}"></h1>
+    </div>
+
+    <div class="ticket-full">
+
+        <!-- Описание -->
+        <div class="ticket-desc-full" th:text="${ticket.description}"></div>
+
+        <!-- Метаданные тикета -->
+        <div class="ticket-meta-full">
+            <p><strong>Статус: </strong><span th:text="${ticket.status}"></span></p>
+            <p><strong>Создан: </strong>
+                <span th:text="${#temporals.format(ticket.createdAt, 'dd.MM.yyyy HH:mm')}"></span>
+            </p>
+            <p th:if="${ticket.status.name == 'DONE'}"><strong>Выполнен: </strong>
+                <span th:text="${#temporals.format(ticket.updatedAt, 'dd.MM.yyyy HH:mm')}"></span>
+            </p>
+            <p><strong>Автор: </strong>
+                <span th:text="${ticket.createdBy.username}"></span>
+            </p>
+
+            <p><strong>Исполнитель: </strong>
+                <span th:if="${ticket.assignedTo != null}"
+                      th:text="${ticket.assignedTo.username}"></span>
+                <span th:if="${ticket.assignedTo == null}">не назначен</span>
+            </p>
+        </div>
+
+        <!-- Блок кнопок действий -->
+        <div class="ticket-actions">
+
+            <!-- Смена статуса -->
+            <form th:action="@{/admin/tickets-list/{id}/change-status(id=${ticket.id})}" method="POST">
+                <button type="submit" class="btn status-btn">
+                    <input th:value="${ticket.id}" name="id" type="hidden">
+                    <input th:value="${ticket.status.name() == 'ACTIVE'} ? 'DONE' : 'ACTIVE'" name="newStatus" type="hidden">
+                    <span th:if="${ticket.status.name() == 'ACTIVE'}">Отметить как Done</span>
+                    <span th:if="${ticket.status.name() == 'DONE'}">Вернуть в Active</span>
+                </button>
+            </form>
+
+            <!-- Редактирование -->
+            <a th:href="@{'/admin/tickets/' + ${ticket.id} + '/edit'}"
+               class="btn edit-btn">Редактировать</a>
+
+            <!-- Удаление -->
+            <form th:action="@{/admin/tickets-list/{id}/delete(id=${ticket.id})}" method="POST"
+                  onsubmit="return confirm('Удалить тикет?');">
+                <button type="submit" class="btn delete-btn">Удалить</button>
+            </form>
+
+        </div>
+
+        <!-- Назначение исполнителя -->
+        <div class="assign-block">
+            <h3>Назначить исполнителя</h3>
+
+            <form th:action="@{'/admin/tickets/' + ${ticket.id} + '/assign'}" method="POST">
+                <select name="executorId" class="assign-select">
+                    <option value="">-- Выбрать исполнителя --</option>
+
+                    <option th:each="user : ${executors}"
+                            th:value="${user.id}"
+                            th:text="${user.username}">
+                    </option>
+                </select>
+
+                <button type="submit" class="btn assign-btn">Назначить</button>
+            </form>
+        </div>
+
+    </div>
+    <a class="create-btn" th:href="@{/admin/tickets-list}">← Назад к списку</a>
+</div>
+
+</body>
+</html>

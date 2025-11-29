@@ -20,9 +20,9 @@ public class RegistrationService {
     }
 
     public void registerUser(RegisterDto registerDto) {
-        if (userRepository.findByUsername(registerDto.username()) != null) {
-            throw new IllegalArgumentException("Пользователь с таким именем уже существует");
-        }
+//        if (userRepository.findByUsername(registerDto.username()) != null) {
+//            throw new IllegalArgumentException("Пользователь с таким именем уже существует");
+//        }
 
         User user = new User();
         user.setUsername(registerDto.username());

@@ -12,13 +12,13 @@
     <div class="header">
         <h1>Тикеты</h1>
         <a class="create-btn" th:href="@{/tickets/new}">+ Создать тикет</a>
-        <a class="admin-panel-btn" th:href="@{/admin/users-list}">Админ Панель</a>
+        <a class="admin-panel-btn" th:href="@{/admin}">Админ Панель</a>
     </div>
 
     <div class="ticket-list">
         <div class="ticket"
              th:each="ticket : ${tickets}">
-            <div class="ticket-title" th:text="${ticket.title}"></div>
+            <div th:text="${ticket.title}" class="ticket-title"></div>
             <div class="ticket-desc" th:text="${ticket.description}"></div>
             <div class="ticket-meta">
                 <span th:text="${ticket.status}"></span>

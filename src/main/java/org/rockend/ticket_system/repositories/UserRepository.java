@@ -14,7 +14,7 @@ import java.util.stream.Collector;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, Integer> {
-    List<User> findUserById(Integer id);
+    User findUserById(long id);
     Optional<User> findUserByUsername(String username);
 
     void deleteUserByUsername(String username);
@@ -23,5 +23,5 @@ public interface UserRepository extends JpaRepository<User, Integer> {
 
     @Modifying
     @Query("UPDATE User u SET u.role = :newRole WHERE u.id = :id")
-    void changeUserRole(@Param("id") int id, @Param("newRole") UserRoles newRole);
+    void changeUserRole(@Param("id") long id, @Param("newRole") UserRoles newRole);
 }

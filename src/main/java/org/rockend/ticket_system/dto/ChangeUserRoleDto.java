@@ -1,4 +1,4 @@
 package org.rockend.ticket_system.dto;
 
 
-public record ChangeUserRoleDto(int id, String newRole) { }
+public record ChangeUserRoleDto(long id, String newRole) { }
