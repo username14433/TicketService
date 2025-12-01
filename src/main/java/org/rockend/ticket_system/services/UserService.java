@@ -1,5 +1,6 @@
 package org.rockend.ticket_system.services;
 import org.rockend.ticket_system.entity.User;
+import org.rockend.ticket_system.entity.enums.UserRoles;
 import org.rockend.ticket_system.repositories.UserRepository;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -26,6 +27,10 @@ public class UserService {
 
     public User getUserById(long id) {
         return userRepository.findUserById(id);
+    }
+
+    public List<User> getAllUsersByRole(UserRoles role) {
+        return userRepository.findAllByRole(role);
     }
 
 }

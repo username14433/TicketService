@@ -3,23 +3,33 @@
 <head>
     <meta charset="UTF-8">
     <title>Регистрация</title>
+    <link rel="stylesheet" th:href="@{/css/register.css}">
 </head>
 <body>
-<h2>Регистрация</h2>
 
-<form th:action="@{/register}" th:object="${registerDto}" th:method="POST">
-    <input type="hidden" th:name="${_csrf.getParameterName()}" th:value="${_csrf.getToken()}">
+<div class="register-container">
 
-    <label>Логин</label><br>
-    <input type="text" th:field="*{username}" required><br><br>
+    <h2>Регистрация</h2>
 
-    <label>Пароль</label><br>
-    <input type="password" th:field="*{password}" required><br><br>
+    <form th:action="@{/register}" th:method="POST">
+        <input type="hidden" th:name="${_csrf.getParameterName()}" th:value="${_csrf.getToken()}">
 
-    <button type="submit">Зарегистрироваться</button>
-</form>
+        <div class="form-group">
+            <label>Логин</label>
+            <input type="text" name="username" required>
+        </div>
 
-<a th:href="@{/login}">Уже есть аккаунт? Войти</a>
+        <div class="form-group">
+            <label>Пароль</label>
+            <input type="password" name="password" required>
+        </div>
+
+        <button type="submit" class="register-btn">Зарегистрироваться</button>
+
+        <a class="login-link" th:href="@{/login}">Уже есть аккаунт? Войти</a>
+    </form>
+
+</div>
 
 </body>
 </html>

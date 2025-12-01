@@ -10,7 +10,11 @@
 <div class="container">
 
     <div class="header">
-        <h1>Админ Панель</h1>
+        <div class="header-top">
+            <h1>Админ Панель</h1>
+            <a class="back-btn" th:href="@{/tickets}">Назад</a>
+        </div>
+
         <div class="admin-info">
             <span th:text="'Вы вошли как: ' + ${admin.username}"></span>
             <span class="role-label" th:text="${admin.role}"></span>

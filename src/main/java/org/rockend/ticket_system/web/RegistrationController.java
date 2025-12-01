@@ -1,5 +1,6 @@
 package org.rockend.ticket_system.web;
 
+import jakarta.validation.Valid;
 import org.rockend.ticket_system.dto.RegisterDto;
 import org.rockend.ticket_system.entity.User;
 import org.rockend.ticket_system.services.RegistrationService;
@@ -20,13 +21,12 @@ public class RegistrationController {
     }
 
     @GetMapping("/register")
-    public String showRegistrationForm(Model model) {
-        model.addAttribute("registerDto", new RegisterDto("", ""));
+    public String showRegistrationForm() {
         return "register"; // Thymeleaf template: register.html
     }
 
     @PostMapping("/register")
-    public String register(@ModelAttribute("registerDto") RegisterDto dto, Model model) {
+    public String register(@Valid RegisterDto dto, Model model) {
 
         try {
             registrationService.registerUser(dto);

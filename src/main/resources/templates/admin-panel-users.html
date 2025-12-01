@@ -2,35 +2,43 @@
 <html lang="ru" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Admin Panel</title>
-    <link rel="stylesheet" th:href="@{/css/admin-panel.css}">
+    <title>Пользователи</title>
+    <link rel="stylesheet" th:href="@{/css/admin-panel-users.css}">
 </head>
 <body>
 
 <div class="container">
+
     <div class="header">
         <h1>Пользователи</h1>
-        <a class="create-btn" th:href="@{/admin}">Назад</a>
+        <a class="back-btn" th:href="@{/admin}">Назад</a>
     </div>
 
-    <div class="ticket-list">
-        <div class="ticket" th:each="user : ${users}">
-            <div class="user-username" th:text="${user.username}"></div>
-            <div class="user-role" th:text="${user.role}"></div>
-            <div class="user-meta">
-                <span th:text="${user.id}"></span>
-                <form th:action="@{/admin/users-list}" th:method="POST">
+    <div class="users-list">
+        <div class="user-card" th:each="user : ${users}">
+
+            <div class="user-main">
+                <div class="username" th:text="${user.username}"></div>
+                <div class="user-id">ID: <span th:text="${user.id}"></span></div>
+            </div>
+
+            <div class="role-info">
+                <div class="current-role" th:text="'Роль: ' + ${user.role}"></div>
+
+                <form class="role-form" th:action="@{/admin/users-list}" th:method="POST">
                     <input th:value="${user.id}" name="id" type="hidden">
-                    <label>
-                        <select name="newRole">
-                            <option th:each="role: ${roles}"
-                                    th:value="${role}"
-                                    th:text="${role}"></option>
-                        </select>
-                    </label>
-                    <button type="submit">Изменить роль</button>
+
+                    <select class="role-select" name="newRole">
+                        <option th:each="role : ${roles}"
+                                th:value="${role}"
+                                th:text="${role}">
+                        </option>
+                    </select>
+
+                    <button class="save-btn" type="submit">Сохранить</button>
                 </form>
             </div>
+
         </div>
     </div>
 

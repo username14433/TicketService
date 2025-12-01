@@ -1,6 +1,8 @@
 package org.rockend.ticket_system.repositories;
 
+import org.rockend.ticket_system.dto.AssignTicketDto;
 import org.rockend.ticket_system.entity.Ticket;
+import org.rockend.ticket_system.entity.User;
 import org.rockend.ticket_system.entity.enums.StatusType;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -29,4 +31,17 @@ public interface TicketRepository extends JpaRepository<Ticket, Integer> {
     void changeTicketStatus(@Param("id") long id,
                             @Param("newStatus") StatusType newStatus,
                             @Param("updatedAt") LocalDateTime updatedAt);
+
+    @Modifying
+    @Query("UPDATE Ticket t" +
+            " SET t.title = :newTitle, t.description = :newDescription, t.updatedAt = :updatedAt" +
+            " WHERE t.id = :id")
+    void changeTicketInfo(@Param("id") long id,
+                          @Param("newTitle") String newTitle,
+                          @Param("newDescription") String newDescription,
+                          @Param("updatedAt") LocalDateTime updatedAt);
+
+    @Modifying
+    @Query("UPDATE Ticket t SET t.assignedTo = :executor WHERE t.id = :ticketId")
+    void assignTicket(@Param("ticketId") long ticketId, @Param("executor") User executor);
 }

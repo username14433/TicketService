@@ -5,14 +5,32 @@ body {
     padding: 0;
 }
 
-.login-container {
-    max-width: 380px;
+.ticket-container {
+    max-width: 420px;
     margin: 120px auto;
     background: white;
     padding: 35px 40px;
     border-radius: 14px;
     box-shadow: 0 4px 14px rgba(0, 0, 0, 0.1);
+    position: relative; /* чтобы back-btn позиционировать внутри */
     text-align: center;
+}
+
+.back-btn {
+    position: absolute;
+    right: 20px;
+    top: 20px;
+    background: #4A7DFF;
+    color: white;
+    padding: 10px 18px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-size: 13px;
+    transition: 0.2s;
+}
+
+.back-btn:hover {
+    background: #3b6ae6;
 }
 
 h2 {
@@ -33,14 +51,20 @@ label {
     color: #333;
 }
 
-input {
+input, textarea {
     padding: 10px;
     border: 1px solid #ccc;
     border-radius: 8px;
     font-size: 14px;
+    width: 100%;
+    resize: none;
 }
 
-.login-btn {
+textarea {
+    height: 110px;
+}
+
+.create-btn {
     width: 100%;
     padding: 10px;
     background: #4A7DFF;
@@ -53,32 +77,6 @@ input {
     margin-top: 10px;
 }
 
-.login-btn:hover {
+.create-btn:hover {
     background: #3b6ae6;
-}
-
-.error {
-    margin-top: 15px;
-    color: #d33;
-    font-size: 14px;
-}
-
-.success {
-    margin-top: 15px;
-    color: #2b8a3e;
-    font-size: 14px;
-}
-
-/* Стиль для ссылки регистрации */
-.register-btn {
-    display: block;
-    margin-top: 20px;
-    text-align: center;
-    text-decoration: none;
-    color: #007bff;
-}
-
-.register-btn:hover {
-   text-decoration: underline;
-   color: #0056b3;
 }

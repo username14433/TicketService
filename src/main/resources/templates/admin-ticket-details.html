@@ -9,16 +9,59 @@
 
 <div class="container">
 
-    <div class="header">
+    <!-- ****************************
+         Блок заголовка (режим просмотра)
+         **************************** -->
+    <div th:if="${editMode == false}" class="header" >
         <h1 th:text="${ticket.title}"></h1>
     </div>
 
-    <div class="ticket-full">
+    <!-- ****************************
+         ФОРМА РЕДАКТИРОВАНИЯ — оборачивает и title, и description
+         **************************** -->
+    <form th:if="${editMode}"
+          th:action="@{/admin/tickets-list/{id}/update(id=${ticket.id})}"
+          method="POST">
 
-        <!-- Описание -->
-        <div class="ticket-desc-full" th:text="${ticket.description}"></div>
+        <div class="header">
+            <label>
+                <input th:value="${ticket.title}"
+                       type="text"
+                       name="newTitle"
+                       class="edit-input">
+            </label>
+        </div>
 
-        <!-- Метаданные тикета -->
+        <div class="ticket-full">
+
+            <!-- Описание -->
+            <label>
+                <textarea th:text="${ticket.description}"
+                          name="newDescription"
+                          class="edit-textarea"
+                          rows="5"></textarea>
+            </label>
+
+            <!-- Кнопки сохранения -->
+            <div class="ticket-actions">
+                <button type="submit" class="btn status-btn">Сохранить</button>
+
+                <a th:href="@{/admin/tickets-list/{id}(id=${ticket.id})}"
+                   class="btn delete-btn" style="background:#777;">
+                    Отмена
+                </a>
+            </div>
+        </div>
+    </form>
+
+    <!-- ****************************
+         Режим просмотра — полное отображение тикета
+         **************************** -->
+    <div th:if="${editMode == false}" class="ticket-full">
+
+        <div th:text="${ticket.description}" class="ticket-desc-full" ></div>
+
+        <!-- Метаданные -->
         <div class="ticket-meta-full">
             <p><strong>Статус: </strong><span th:text="${ticket.status}"></span></p>
             <p><strong>Создан: </strong>
@@ -38,24 +81,26 @@
             </p>
         </div>
 
-        <!-- Блок кнопок действий -->
+        <!-- Действия -->
         <div class="ticket-actions">
 
             <!-- Смена статуса -->
             <form th:action="@{/admin/tickets-list/{id}/change-status(id=${ticket.id})}" method="POST">
                 <button type="submit" class="btn status-btn">
                     <input th:value="${ticket.id}" name="id" type="hidden">
-                    <input th:value="${ticket.status.name() == 'ACTIVE'} ? 'DONE' : 'ACTIVE'" name="newStatus" type="hidden">
+                    <input th:value="${ticket.status.name() == 'ACTIVE'} ? 'DONE' : 'ACTIVE'"
+                           name="newStatus"
+                           type="hidden">
                     <span th:if="${ticket.status.name() == 'ACTIVE'}">Отметить как Done</span>
                     <span th:if="${ticket.status.name() == 'DONE'}">Вернуть в Active</span>
                 </button>
             </form>
 
-            <!-- Редактирование -->
-            <a th:href="@{'/admin/tickets/' + ${ticket.id} + '/edit'}"
+            <!-- Редактировать -->
+            <a th:href="@{/admin/tickets-list/{id}(id=${ticket.id}, edit=${true})}"
                class="btn edit-btn">Редактировать</a>
 
-            <!-- Удаление -->
+            <!-- Удалить -->
             <form th:action="@{/admin/tickets-list/{id}/delete(id=${ticket.id})}" method="POST"
                   onsubmit="return confirm('Удалить тикет?');">
                 <button type="submit" class="btn delete-btn">Удалить</button>
@@ -63,11 +108,12 @@
 
         </div>
 
-        <!-- Назначение исполнителя -->
+        <!-- Назначение -->
         <div class="assign-block">
             <h3>Назначить исполнителя</h3>
 
-            <form th:action="@{'/admin/tickets/' + ${ticket.id} + '/assign'}" method="POST">
+            <form th:action="@{/admin/tickets-list/{id}/assign(id=${ticket.id})}" method="POST">
+                <input th:value="${ticket.id}" type="hidden" name="ticketId">
                 <select name="executorId" class="assign-select">
                     <option value="">-- Выбрать исполнителя --</option>
 
@@ -80,8 +126,8 @@
                 <button type="submit" class="btn assign-btn">Назначить</button>
             </form>
         </div>
-
     </div>
+
     <a class="create-btn" th:href="@{/admin/tickets-list}">← Назад к списку</a>
 </div>
 

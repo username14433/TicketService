@@ -1,9 +1,6 @@
 package org.rockend.ticket_system.web;
 
-import org.rockend.ticket_system.dto.AdminStatisticsDto;
-import org.rockend.ticket_system.dto.ChangeTicketStatusDto;
-import org.rockend.ticket_system.dto.ChangeUserRoleDto;
-import org.rockend.ticket_system.dto.CustomUserDetails;
+import org.rockend.ticket_system.dto.*;
 import org.rockend.ticket_system.entity.Ticket;
 import org.rockend.ticket_system.entity.User;
 import org.rockend.ticket_system.entity.enums.UserRoles;
@@ -68,9 +65,17 @@ public class AdminPanelController {
     }
 
     @GetMapping("/tickets-list/{id}")
-    public String ticketDetails(@PathVariable("id") long id, Model model) {
+    public String ticketDetails(@PathVariable("id") long id,
+                                @RequestParam(value = "edit", required = false) Boolean editMode,
+                                Model model) {
         Ticket ticket = ticketService.getTicketById(id);
         model.addAttribute("ticket", ticket);
+
+        editMode = editMode != null && editMode;
+        model.addAttribute("editMode", editMode);
+
+        List<User> executors =  userService.getAllUsersByRole(UserRoles.EXECUTOR);
+        model.addAttribute("executors", executors);
         return "admin-ticket-details";
     }
 
@@ -84,6 +89,18 @@ public class AdminPanelController {
     public String deleteTicket(@PathVariable("id") long id) {
         ticketService.deleteTicket(id);
         return "redirect:/admin/tickets-list";
+    }
+
+    @PostMapping("/tickets-list/{id}/update")
+    public String changeTicketInfo(@PathVariable("id") long id, ChangeTicketInfoDto changeTicketInfoDto) {
+        ticketService.changeTicketInfo(id, changeTicketInfoDto.newTitle(), changeTicketInfoDto.newDescription());
+        return "redirect:/admin/tickets-list/" + id;
+    }
+
+    @PostMapping("/tickets-list/{id}/assign")
+    public String assignTicket(@PathVariable("id") long id, AssignTicketDto assignTicketDto) {
+        ticketService.assignTicket(assignTicketDto);
+        return "redirect:/admin/tickets-list/" + id;
     }
 
 }

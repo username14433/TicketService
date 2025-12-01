@@ -1,5 +1,6 @@
 package org.rockend.ticket_system.services;
 
+import org.rockend.ticket_system.dto.AssignTicketDto;
 import org.rockend.ticket_system.dto.CustomUserDetails;
 import org.rockend.ticket_system.dto.TicketCreateDto;
 import org.rockend.ticket_system.entity.Ticket;
@@ -20,9 +21,11 @@ import java.util.List;
 public class TicketService {
 
     private final TicketRepository ticketRepository;
+    private final UserService userService;
 
-    public TicketService(TicketRepository ticketRepository) {
+    public TicketService(TicketRepository ticketRepository, UserService userService) {
         this.ticketRepository = ticketRepository;
+        this.userService = userService;
     }
 
     public List<Ticket> getAllTickets() {
@@ -31,8 +34,6 @@ public class TicketService {
 
 
     public void createTicket(TicketCreateDto ticketDto, Authentication auth) {
-
-        //TODO: протестировать, так как было переписано через auth
         User creator = ((CustomUserDetails) auth.getPrincipal()).getUser();
 
         Ticket ticket = new Ticket();
@@ -57,5 +58,14 @@ public class TicketService {
 
     public void deleteTicket(long id) {
         ticketRepository.deleteTicketById(id);
+    }
+
+    public void changeTicketInfo(long id, String newTitle, String newDescription) {
+        ticketRepository.changeTicketInfo(id, newTitle, newDescription, LocalDateTime.now());
+    }
+
+    public void assignTicket(AssignTicketDto assignTicketDto) {
+        User executor = userService.getUserById(assignTicketDto.executorId());
+        ticketRepository.assignTicket(assignTicketDto.ticketId(), executor);
     }
 }

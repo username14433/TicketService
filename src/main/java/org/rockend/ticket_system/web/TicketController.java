@@ -1,16 +1,14 @@
 package org.rockend.ticket_system.web;
 
-import org.rockend.ticket_system.dto.ChangeTicketStatusDto;
-import org.rockend.ticket_system.dto.CustomUserDetails;
 import org.rockend.ticket_system.dto.TicketCreateDto;
 import org.rockend.ticket_system.entity.Ticket;
-import org.rockend.ticket_system.entity.enums.StatusType;
 import org.rockend.ticket_system.services.TicketService;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import jakarta.validation.Valid;
 
 import java.util.List;
 
@@ -33,16 +31,14 @@ public class TicketController {
     }
 
     @GetMapping("/new")
-    public String showNewTicketForm(Model model) {
-        model.addAttribute("ticketDto", new TicketCreateDto("", ""));
-        return "addTicketForm";
+    public String showNewTicketForm() {
+        return "add-ticket-form";
     }
 
     @PostMapping("/new")
     public String createTicket(
-            @ModelAttribute("ticketDto") TicketCreateDto ticketDto,
-            Authentication auth,
-            Model model
+            @Valid TicketCreateDto ticketDto,
+            Authentication auth
     ) {
         ticketService.createTicket(ticketDto, auth);
 

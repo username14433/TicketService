@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@Transactional
 public class AdminService {
 
     private final UserRepository userRepository;
@@ -20,7 +21,6 @@ public class AdminService {
         this.ticketService = ticketService;
     }
 
-    @Transactional
     public void changeUserRole(long id, UserRoles newRole) {
         userRepository.changeUserRole(id, newRole);
     }

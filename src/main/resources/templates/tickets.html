@@ -18,13 +18,41 @@
     <div class="ticket-list">
         <div class="ticket"
              th:each="ticket : ${tickets}">
-            <div th:text="${ticket.title}" class="ticket-title"></div>
-            <div class="ticket-desc" th:text="${ticket.description}"></div>
-            <div class="ticket-meta">
-                <span th:text="${ticket.status}"></span>
-                <span th:text="${#temporals.format(ticket.createdAt, 'dd.MM.yyyy HH:mm:ss')}"></span>
+
+            <div class="ticket-left">
+                <div class="ticket-title" th:text="${ticket.title}"></div>
+                <div class="ticket-desc" th:text="${ticket.description}"></div>
+
+                <div class="ticket-meta">
+                    <span th:text="${ticket.status}"></span>
+                    <span th:text="${#temporals.format(ticket.createdAt, 'dd.MM.yyyy HH:mm:ss')}"></span>
+                    <span th:if="${ticket.status.name == 'DONE'}">
+                Completed at [[${#temporals.format(ticket.updatedAt, 'dd.MM.yyyy HH:mm:ss')}]]
+            </span>
+                </div>
             </div>
+
+            <div class="ticket-right">
+                <div class="ticket-user">
+                    Создал: <span th:text="${ticket.createdBy.username}"></span>
+                </div>
+
+                <div class="ticket-user" th:if="${ticket.assignedTo != null and ticket.status.name == 'DONE'}">
+                    Исполнил: <span th:text="${ticket.assignedTo.username}"></span>
+                </div>
+                <div class="ticket-user" th:if="${ticket.assignedTo != null and ticket.status.name == 'ACTIVE'}">
+                    Назначен: <span th:text="${ticket.assignedTo != null} ? ${ticket.assignedTo.username} : 'Не назначен'"></span>
+                </div>
+            </div>
+
         </div>
+    </div>
+
+
+    <div class="footer">
+        <form th:action="@{/logout}" method="post" class="logout-form">
+            <button type="submit" class="logout-btn">Выйти из аккаунта</button>
+        </form>
     </div>
 
 </div>

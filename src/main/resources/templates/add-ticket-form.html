@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Создание тикета</title>
+    <link rel="stylesheet" th:href="@{/css/add-ticket-form.css}">
+</head>
+<body>
+
+<div class="ticket-container">
+
+    <a class="back-btn" th:href="@{/tickets}">Назад</a>
+
+    <h2>Создать новый тикет</h2>
+
+    <form th:action="@{/tickets/new}" method="post">
+
+        <div class="form-group">
+            <label>Название тикета</label>
+            <input type="text" name="title" required>
+        </div>
+
+        <div class="form-group">
+            <label>Описание</label>
+            <textarea name="description" required></textarea>
+        </div>
+
+        <button type="submit" class="create-btn">Создать</button>
+
+    </form>
+
+</div>
+
+</body>
+</html>
