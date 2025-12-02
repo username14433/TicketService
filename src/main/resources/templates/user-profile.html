@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Админ панель</title>
+    <link rel="stylesheet" th:href="@{/css/user-profile.css}">
+</head>
+<body>
+
+<div class="container">
+
+    <div class="header">
+        <div class="header-top">
+            <h1>Профиль</h1>
+            <a class="back-btn" th:href="@{/tickets}">Назад</a>
+        </div>
+
+        <div class="admin-info">
+            <span th:text="'Вы вошли как: ' + ${user.username}"></span>
+            <span class="role-label" th:text="${user.role}"></span>
+        </div>
+    </div>
+
+    <div class="stats-grid">
+        <div class="stat-card">
+            <div class="stat-value" th:text="${userStatistics.createdTicketsCount}"></div>
+            <div class="stat-label">Созданных тикетов</div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-value" th:text="${userStatistics.completedTicketsCount}"></div>
+            <div class="stat-label">Выполненных тикетов</div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-value" th:text="${userStatistics.assignedTicketsCount}"></div>
+            <div class="stat-label">Назначенных тикетов</div>
+        </div>
+
+<!--        <div class="stat-card">-->
+<!--            <div class="stat-value" th:text="${adminStatistics.unassignedTicketsCount}"></div>-->
+<!--            <div class="stat-label">Не назначено</div>-->
+<!--        </div>-->
+    </div>
+
+    <div class="actions">
+        <a class="action-btn" th:href="@{/tickets/my(filter='all')}">Мои тикеты</a>
+<!--        <a class="action-btn" th:href="@{/admin/tickets-list}">Список тикетов</a>-->
+    </div>
+
+</div>
+
+</body>
+</html>

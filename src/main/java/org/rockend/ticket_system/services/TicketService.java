@@ -3,11 +3,11 @@ package org.rockend.ticket_system.services;
 import org.rockend.ticket_system.dto.AssignTicketDto;
 import org.rockend.ticket_system.dto.CustomUserDetails;
 import org.rockend.ticket_system.dto.TicketCreateDto;
+import org.rockend.ticket_system.dto.UserTicketsDto;
 import org.rockend.ticket_system.entity.Ticket;
 import org.rockend.ticket_system.entity.User;
 import org.rockend.ticket_system.entity.enums.StatusType;
 import org.rockend.ticket_system.repositories.TicketRepository;
-import org.rockend.ticket_system.repositories.UserRepository;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
@@ -67,5 +67,14 @@ public class TicketService {
     public void assignTicket(AssignTicketDto assignTicketDto) {
         User executor = userService.getUserById(assignTicketDto.executorId());
         ticketRepository.assignTicket(assignTicketDto.ticketId(), executor);
+    }
+
+    public UserTicketsDto getUserTickets(Authentication auth) {
+        User user = ((CustomUserDetails) auth.getPrincipal()).getUser();
+        List<Ticket> createdTickets = ticketRepository.findCreatedTicketsByUserId(user.getId());
+        List<Ticket> completedTickets = ticketRepository.findAssignedTicketsByUserId(user.getId())
+                .stream().filter(ticket -> ticket.getStatus() == StatusType.DONE).toList();
+
+        return new UserTicketsDto(createdTickets, completedTickets);
     }
 }

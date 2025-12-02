@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" lang="ru">
 <head>
     <meta charset="UTF-8">
     <title th:text="'Тикет: ' + ${ticket.title}"></title>
-    <link rel="stylesheet" th:href="@{/css/admin-ticket-details.css}">
+    <link rel="stylesheet" th:href="@{/css/user-ticket-details.css}">
 </head>
 <body>
 
@@ -20,7 +20,7 @@
          ФОРМА РЕДАКТИРОВАНИЯ — оборачивает и title, и description
          **************************** -->
     <form th:if="${editMode}"
-          th:action="@{/admin/tickets-list/{id}/update(id=${ticket.id})}"
+          th:action="@{/tickets/my/{id}/update(id=${ticket.id})}"
           method="POST">
 
         <div class="header">
@@ -46,7 +46,7 @@
             <div class="ticket-actions">
                 <button type="submit" class="btn status-btn">Сохранить</button>
 
-                <a th:href="@{/admin/tickets-list/{id}(id=${ticket.id})}"
+                <a th:href="@{/tickets/my/{id}(id=${ticket.id})}"
                    class="btn delete-btn" style="background:#777;">
                     Отмена
                 </a>
@@ -86,52 +86,13 @@
 
         <!-- Действия -->
         <div class="ticket-actions">
-
-            <!-- Смена статуса -->
-            <form th:action="@{/admin/tickets-list/{id}/change-status(id=${ticket.id})}" method="POST">
-                <button type="submit" class="btn status-btn">
-                    <input th:value="${ticket.id}" name="id" type="hidden">
-                    <input th:value="${ticket.status.name() == 'ACTIVE'} ? 'DONE' : 'ACTIVE'"
-                           name="newStatus"
-                           type="hidden">
-                    <span th:if="${ticket.status.name() == 'ACTIVE'}">Отметить как Done</span>
-                    <span th:if="${ticket.status.name() == 'DONE'}">Вернуть в Active</span>
-                </button>
-            </form>
-
             <!-- Редактировать -->
-            <a th:href="@{/admin/tickets-list/{id}(id=${ticket.id}, edit=${true})}"
+            <a th:href="@{/tickets/my/{id}(id=${ticket.id}, edit=${true})}"
                class="btn edit-btn">Редактировать</a>
-
-            <!-- Удалить -->
-            <form th:action="@{/admin/tickets-list/{id}/delete(id=${ticket.id})}" method="POST"
-                  onsubmit="return confirm('Удалить тикет?');">
-                <button type="submit" class="btn delete-btn">Удалить</button>
-            </form>
-
-        </div>
-
-        <!-- Назначение -->
-        <div class="assign-block">
-            <h3>Назначить исполнителя</h3>
-
-            <form th:action="@{/admin/tickets-list/{id}/assign(id=${ticket.id})}" method="POST">
-                <input th:value="${ticket.id}" type="hidden" name="ticketId">
-                <select name="executorId" class="assign-select">
-                    <option value="">-- Выбрать исполнителя --</option>
-
-                    <option th:each="user : ${executors}"
-                            th:value="${user.id}"
-                            th:text="${user.username}">
-                    </option>
-                </select>
-
-                <button type="submit" class="btn assign-btn">Назначить</button>
-            </form>
         </div>
     </div>
 
-    <a class="create-btn" th:href="@{/admin/tickets-list}">← Назад к списку</a>
+    <a class="create-btn" th:href="@{/tickets/my(filter=${'all'})}">← Назад к списку</a>
 </div>
 
 </body>

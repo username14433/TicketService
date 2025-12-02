@@ -11,8 +11,11 @@
 
     <div class="header">
         <h1>Тикеты</h1>
-        <a class="create-btn" th:href="@{/tickets/new}">+ Создать тикет</a>
-        <a class="admin-panel-btn" th:href="@{/admin}">Админ Панель</a>
+        <div class="header-buttons">
+            <a class="create-btn" th:href="@{/tickets/new}">+ Создать тикет</a>
+            <a class="admin-panel-btn" th:href="@{/admin}">Админ Панель</a>
+            <a class="profile-btn" th:href="@{/profile}">Профиль</a>
+        </div>
     </div>
 
     <div class="ticket-list">

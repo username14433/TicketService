@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Мои тикеты</title>
+    <link rel="stylesheet" th:href="@{/css/user-tickets.css}">
+</head>
+<body>
+
+<div class="tickets-container">
+
+    <a class="back-btn" th:href="@{/profile}">Назад</a>
+
+    <h2>Мои тикеты</h2>
+
+    <!-- ФИЛЬТР -->
+    <form class="filter-form" th:action="@{/tickets/my}" method="get">
+
+        <select name="filter">
+            <option value="all"
+                    th:selected="${filter == 'all'}">Все</option>
+            <option value="created"
+                    th:selected="${filter == 'created'}">Созданные мной</option>
+            <option value="done"
+                    th:selected="${filter == 'done'}">Выполненные мной</option>
+        </select>
+
+        <button type="submit" class="filter-btn">Применить</button>
+    </form>
+
+    <!-- СПИСОК ТИКЕТОВ -->
+    <div th:switch="${filter}" class="tickets-list">
+        <div th:case="'all'">
+            <div class="ticket-card"
+                 th:each="ticket : ${tickets}">
+                <div class="ticket-left">
+                    <a th:text="${ticket.title}" th:href="@{/tickets/my/{id}(id=${ticket.id})}" class="ticket-title"></a>
+                    <div th:text="${ticket.description}" class="ticket-desc"></div>
+
+                    <div class="ticket-meta">
+                        <span th:text="${ticket.status}"></span>
+                        <span th:text="${#temporals.format(ticket.createdAt, 'dd.MM.yyyy HH:mm:ss')}"></span>
+                        <span th:if="${ticket.status.name == 'DONE'}">
+                    Completed at [[${#temporals.format(ticket.updatedAt, 'dd.MM.yyyy HH:mm:ss')}]]
+                </span>
+                    </div>
+                </div>
+
+                <div class="ticket-right">
+                    <div class="ticket-user">
+                        Создал: <span th:text="${ticket.createdBy.username}"></span>
+                    </div>
+
+                    <div class="ticket-user" th:if="${ticket.assignedTo != null and ticket.status.name == 'DONE'}">
+                        Исполнил: <span th:text="${ticket.assignedTo.username}"></span>
+                    </div>
+                    <div class="ticket-user" th:if="${ticket.assignedTo != null and ticket.status.name == 'ACTIVE'}">
+                        Назначен: <span th:text="${ticket.assignedTo != null} ? ${ticket.assignedTo.username} : 'Не назначен'"></span>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <div th:case="'created'">
+            <div class="ticket-card"
+                 th:each="ticket : ${createdTickets}">
+
+                <div class="ticket-left">
+                    <a th:text="${ticket.title}" th:href="@{/tickets/my/{id}(id=${ticket.id})}" class="ticket-title"></a>
+                    <div th:text="${ticket.description}" class="ticket-desc"></div>
+
+                    <div class="ticket-meta">
+                        <span th:text="${ticket.status}"></span>
+                        <span th:text="${#temporals.format(ticket.createdAt, 'dd.MM.yyyy HH:mm:ss')}"></span>
+                        <span th:if="${ticket.status.name == 'DONE'}">
+                    Completed at [[${#temporals.format(ticket.updatedAt, 'dd.MM.yyyy HH:mm:ss')}]]
+                </span>
+                    </div>
+                </div>
+
+                <div class="ticket-right">
+                    <div class="ticket-user">
+                        Создал: <span th:text="${ticket.createdBy.username}"></span>
+                    </div>
+
+                    <div class="ticket-user" th:if="${ticket.assignedTo != null and ticket.status.name == 'DONE'}">
+                        Исполнил: <span th:text="${ticket.assignedTo.username}"></span>
+                    </div>
+                    <div class="ticket-user" th:if="${ticket.assignedTo != null and ticket.status.name == 'ACTIVE'}">
+                        Назначен: <span th:text="${ticket.assignedTo != null} ? ${ticket.assignedTo.username} : 'Не назначен'"></span>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <div th:case="'done'">
+            <div class="ticket-card"
+                 th:each="ticket : ${completedTickets}">
+
+                <div class="ticket-left">
+                    <a th:text="${ticket.title}" th:href="@{/tickets/my/{id}(id=${ticket.id})}" class="ticket-title"></a>
+                    <div th:text="${ticket.description}" class="ticket-desc"></div>
+
+                    <div class="ticket-meta">
+                        <span th:text="${ticket.status}"></span>
+                        <span th:text="${#temporals.format(ticket.createdAt, 'dd.MM.yyyy HH:mm:ss')}"></span>
+                        <span th:if="${ticket.status.name == 'DONE'}">
+                    Completed at [[${#temporals.format(ticket.updatedAt, 'dd.MM.yyyy HH:mm:ss')}]]
+                </span>
+                    </div>
+                </div>
+
+                <div class="ticket-right">
+                    <div class="ticket-user">
+                        Создал: <span th:text="${ticket.createdBy.username}"></span>
+                    </div>
+
+                    <div class="ticket-user" th:if="${ticket.assignedTo != null and ticket.status.name == 'DONE'}">
+                        Исполнил: <span th:text="${ticket.assignedTo.username}"></span>
+                    </div>
+                    <div class="ticket-user" th:if="${ticket.assignedTo != null and ticket.status.name == 'ACTIVE'}">
+                        Назначен: <span th:text="${ticket.assignedTo != null} ? ${ticket.assignedTo.username} : 'Не назначен'"></span>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+</body>
+</html>
