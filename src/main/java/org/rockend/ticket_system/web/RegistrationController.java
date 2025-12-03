@@ -2,22 +2,19 @@ package org.rockend.ticket_system.web;
 
 import jakarta.validation.Valid;
 import org.rockend.ticket_system.dto.RegisterDto;
-import org.rockend.ticket_system.entity.User;
-import org.rockend.ticket_system.services.RegistrationService;
-import org.rockend.ticket_system.services.UserService;
+import org.rockend.ticket_system.services.RegistrationServiceImpl;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
 @Controller
 public class RegistrationController {
 
-    private final RegistrationService registrationService;
+    private final RegistrationServiceImpl registrationServiceImpl;
 
-    public RegistrationController(RegistrationService registrationService) {
-        this.registrationService = registrationService;
+    public RegistrationController(RegistrationServiceImpl registrationServiceImpl) {
+        this.registrationServiceImpl = registrationServiceImpl;
     }
 
     @GetMapping("/register")
@@ -29,7 +26,7 @@ public class RegistrationController {
     public String register(@Valid RegisterDto dto, Model model) {
 
         try {
-            registrationService.registerUser(dto);
+            registrationServiceImpl.registerUser(dto);
         } catch (IllegalArgumentException ex) {
             // Например, если пользователь уже существует
             model.addAttribute("error", ex.getMessage());

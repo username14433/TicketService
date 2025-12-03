@@ -3,7 +3,7 @@ package org.rockend.ticket_system.web;
 import org.rockend.ticket_system.dto.CustomUserDetails;
 import org.rockend.ticket_system.dto.UserStatisticsDto;
 import org.rockend.ticket_system.entity.User;
-import org.rockend.ticket_system.services.UserService;
+import org.rockend.ticket_system.services.UserServiceImpl;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -14,10 +14,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/profile")
 public class UserProfileController {
 
-    private final UserService userService;
+    private final UserServiceImpl userServiceImpl;
 
-    public UserProfileController(UserService userService) {
-        this.userService = userService;
+    public UserProfileController(UserServiceImpl userServiceImpl) {
+        this.userServiceImpl = userServiceImpl;
     }
 
     @GetMapping
@@ -25,7 +25,7 @@ public class UserProfileController {
         User user = ((CustomUserDetails) auth.getPrincipal()).getUser();
         model.addAttribute("user", user);
 
-        UserStatisticsDto userStatistics = userService.getUserStatistics(auth);
+        UserStatisticsDto userStatistics = userServiceImpl.getUserStatistics(auth);
         model.addAttribute("userStatistics", userStatistics);
         return "user-profile";
     }

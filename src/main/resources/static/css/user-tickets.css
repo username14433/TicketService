@@ -85,6 +85,8 @@ h2 {
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
+
+    position: relative;
 }
 
 .ticket-title {
@@ -141,4 +143,22 @@ h2 {
 
 .open-btn:hover {
     background: #3b6ae6;
+}
+
+.comments-btn {
+    position: absolute;
+    bottom: 12px;   /* отступ от низа карточки */
+    right: 12px;    /* отступ от правого края */
+
+    padding: 6px;
+    background: #d3d3d3;
+    color: #333;
+    border-radius: 6px;
+    font-size: 12px;
+    text-decoration: none;
+    /*transition: 0.2s;*/
+}
+
+.comments-btn:hover {
+    background: #bcbcbc; /*#d3d3d3*/
 }

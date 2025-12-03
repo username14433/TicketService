@@ -4,9 +4,9 @@ import org.rockend.ticket_system.dto.*;
 import org.rockend.ticket_system.entity.Ticket;
 import org.rockend.ticket_system.entity.User;
 import org.rockend.ticket_system.entity.enums.UserRoles;
-import org.rockend.ticket_system.services.AdminService;
-import org.rockend.ticket_system.services.TicketService;
-import org.rockend.ticket_system.services.UserService;
+import org.rockend.ticket_system.services.AdminServiceImpl;
+import org.rockend.ticket_system.services.TicketServiceImpl;
+import org.rockend.ticket_system.services.UserServiceImpl;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -19,21 +19,21 @@ import java.util.List;
 @RequestMapping("/admin")
 public class AdminPanelController {
 
-    private final UserService userService;
-    private final AdminService adminService;
-    private final TicketService ticketService;
+    private final UserServiceImpl userServiceImpl;
+    private final AdminServiceImpl adminServiceImpl;
+    private final TicketServiceImpl ticketServiceImpl;
 
 
-    public AdminPanelController(UserService userService, AdminService adminService, TicketService ticketService) {
-        this.userService = userService;
-        this.adminService = adminService;
-        this.ticketService = ticketService;
+    public AdminPanelController(UserServiceImpl userServiceImpl, AdminServiceImpl adminServiceImpl, TicketServiceImpl ticketServiceImpl) {
+        this.userServiceImpl = userServiceImpl;
+        this.adminServiceImpl = adminServiceImpl;
+        this.ticketServiceImpl = ticketServiceImpl;
     }
 
     @GetMapping
     public String adminPanelMain(Authentication auth, Model model) {
         User adminUser = ((CustomUserDetails)auth.getPrincipal()).getUser();
-        AdminStatisticsDto adminStatisticsDto = adminService.getAdminStatistics();
+        AdminStatisticsDto adminStatisticsDto = adminServiceImpl.getAdminStatistics();
         model.addAttribute("admin", adminUser);
         model.addAttribute("adminStatistics", adminStatisticsDto);
 
@@ -42,7 +42,7 @@ public class AdminPanelController {
 
     @GetMapping("/users-list")
     public String adminPanelUsers(Model model) {
-        List<User> users = userService.getAllUsers();
+        List<User> users = userServiceImpl.getAllUsers();
         List<String> roles = Arrays.stream(UserRoles.values()).map(UserRoles::name).toList();
         model.addAttribute("users", users);
         model.addAttribute("roles", roles);
@@ -52,13 +52,13 @@ public class AdminPanelController {
 
     @PostMapping("/users-list")
     public String changeUserRole(ChangeUserRoleDto changeUserRoleDto) {
-        adminService.changeUserRole(changeUserRoleDto.id(), UserRoles.valueOf(changeUserRoleDto.newRole()));
+        adminServiceImpl.changeUserRole(changeUserRoleDto.id(), UserRoles.valueOf(changeUserRoleDto.newRole()));
         return "redirect:/admin/users-list";
     }
 
     @GetMapping("/tickets-list")
     public String adminPanelTickets(Model model) {
-        List<Ticket> tickets = ticketService.getAllTickets();
+        List<Ticket> tickets = ticketServiceImpl.getAllTickets();
 
         model.addAttribute("tickets", tickets);
         return "admin-panel-tickets";
@@ -68,38 +68,38 @@ public class AdminPanelController {
     public String ticketDetails(@PathVariable("id") long id,
                                 @RequestParam(value = "edit", required = false) Boolean editMode,
                                 Model model) {
-        Ticket ticket = ticketService.getTicketById(id);
+        Ticket ticket = ticketServiceImpl.getTicketById(id);
         model.addAttribute("ticket", ticket);
 
         editMode = editMode != null && editMode;
         model.addAttribute("editMode", editMode);
 
-        List<User> executors =  userService.getAllUsersByRole(UserRoles.EXECUTOR);
+        List<User> executors =  userServiceImpl.getAllUsersByRole(UserRoles.EXECUTOR);
         model.addAttribute("executors", executors);
         return "admin-ticket-details";
     }
 
     @PostMapping("/tickets-list/{id}/change-status")
     public String changeTicketStatus(ChangeTicketStatusDto changeTicketStatusDto) {
-        ticketService.changeTicketStatus(changeTicketStatusDto.id(), changeTicketStatusDto.newStatus());
+        ticketServiceImpl.changeTicketStatus(changeTicketStatusDto.id(), changeTicketStatusDto.newStatus());
         return "redirect:/admin/tickets-list/" + changeTicketStatusDto.id();
     }
 
     @PostMapping("/tickets-list/{id}/delete")
     public String deleteTicket(@PathVariable("id") long id) {
-        ticketService.deleteTicket(id);
+        ticketServiceImpl.deleteTicket(id);
         return "redirect:/admin/tickets-list";
     }
 
     @PostMapping("/tickets-list/{id}/update")
     public String changeTicketInfo(@PathVariable("id") long id, ChangeTicketInfoDto changeTicketInfoDto) {
-        ticketService.changeTicketInfo(id, changeTicketInfoDto.newTitle(), changeTicketInfoDto.newDescription());
+        ticketServiceImpl.changeTicketInfo(id, changeTicketInfoDto.newTitle(), changeTicketInfoDto.newDescription());
         return "redirect:/admin/tickets-list/" + id;
     }
 
     @PostMapping("/tickets-list/{id}/assign")
     public String assignTicket(@PathVariable("id") long id, AssignTicketDto assignTicketDto) {
-        ticketService.assignTicket(assignTicketDto);
+        ticketServiceImpl.assignTicket(assignTicketDto);
         return "redirect:/admin/tickets-list/" + id;
     }
 

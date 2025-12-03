@@ -9,16 +9,10 @@
 
 <div class="container">
 
-    <!-- ****************************
-         Блок заголовка (режим просмотра)
-         **************************** -->
     <div th:if="${editMode == false}" class="header" >
         <h1 th:text="${ticket.title}"></h1>
     </div>
 
-    <!-- ****************************
-         ФОРМА РЕДАКТИРОВАНИЯ — оборачивает и title, и description
-         **************************** -->
     <form th:if="${editMode}"
           th:action="@{/tickets/my/{id}/update(id=${ticket.id})}"
           method="POST">
@@ -54,9 +48,7 @@
         </div>
     </form>
 
-    <!-- ****************************
-         Режим просмотра — полное отображение тикета
-         **************************** -->
+
     <div th:if="${editMode == false}" class="ticket-full">
 
         <div th:text="${ticket.description}" class="ticket-desc-full" ></div>
@@ -87,8 +79,20 @@
         <!-- Действия -->
         <div class="ticket-actions">
             <!-- Редактировать -->
-            <a th:href="@{/tickets/my/{id}(id=${ticket.id}, edit=${true})}"
+            <a th:if="${ticket.createdBy.id == currentUser.id or currentUser.role.name == 'ADMIN'}" th:href="@{/tickets/my/{id}(id=${ticket.id}, edit=${true})}"
                class="btn edit-btn">Редактировать</a>
+
+            <!-- Смена статуса -->
+            <form th:if="${ticket.assignedTo.id == currentUser.id or ticket.createdBy.id == currentUser.id}" th:action="@{/tickets/my/{id}/change-status(id=${ticket.id})}" method="POST">
+                <button type="submit" class="btn status-btn">
+                    <input th:value="${ticket.id}" name="id" type="hidden">
+                    <input th:value="${ticket.status.name() == 'ACTIVE'} ? 'DONE' : 'ACTIVE'"
+                           name="newStatus"
+                           type="hidden">
+                    <span th:if="${ticket.status.name() == 'ACTIVE'}">Отметить как Done</span>
+                    <span th:if="${ticket.status.name() == 'DONE'}">Вернуть в Active</span>
+                </button>
+            </form>
         </div>
     </div>
 

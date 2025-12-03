@@ -21,6 +21,8 @@
                     th:selected="${filter == 'all'}">Все</option>
             <option value="created"
                     th:selected="${filter == 'created'}">Созданные мной</option>
+            <option value="assigned"
+                    th:selected="${filter == 'assigned'}">Назначенные мне</option>
             <option value="done"
                     th:selected="${filter == 'done'}">Выполненные мной</option>
         </select>
@@ -57,6 +59,13 @@
                     <div class="ticket-user" th:if="${ticket.assignedTo != null and ticket.status.name == 'ACTIVE'}">
                         Назначен: <span th:text="${ticket.assignedTo != null} ? ${ticket.assignedTo.username} : 'Не назначен'"></span>
                     </div>
+
+                    <div>
+                        <a class="comments-btn"
+                           th:href="@{/tickets/{id}/comments(id=${ticket.id})}">
+                            Комментарии
+                        </a>
+                    </div>
                 </div>
 
             </div>
@@ -87,8 +96,55 @@
                     <div class="ticket-user" th:if="${ticket.assignedTo != null and ticket.status.name == 'DONE'}">
                         Исполнил: <span th:text="${ticket.assignedTo.username}"></span>
                     </div>
+                    <div class="ticket-user" th:if="${ticket.status.name == 'ACTIVE'}">
+                        Назначен: <span th:text="${ticket.assignedTo != null} ? ${ticket.assignedTo.username} : 'Не назначен'"></span>
+                    </div>
+
+                    <div>
+                        <a class="comments-btn"
+                           th:href="@{/tickets/{id}/comments(id=${ticket.id})}">
+                            Комментарии
+                        </a>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <div th:case="'assigned'">
+            <div class="ticket-card"
+                 th:each="ticket : ${assignedTickets}">
+
+                <div class="ticket-left">
+                    <a th:text="${ticket.title}" th:href="@{/tickets/my/{id}(id=${ticket.id})}" class="ticket-title"></a>
+                    <div th:text="${ticket.description}" class="ticket-desc"></div>
+
+                    <div class="ticket-meta">
+                        <span th:text="${ticket.status}"></span>
+                        <span th:text="${#temporals.format(ticket.createdAt, 'dd.MM.yyyy HH:mm:ss')}"></span>
+                        <span th:if="${ticket.status.name == 'DONE'}">
+                    Completed at [[${#temporals.format(ticket.updatedAt, 'dd.MM.yyyy HH:mm:ss')}]]
+                </span>
+                    </div>
+                </div>
+
+                <div class="ticket-right">
+                    <div class="ticket-user">
+                        Создал: <span th:text="${ticket.createdBy.username}"></span>
+                    </div>
+
+                    <div class="ticket-user" th:if="${ticket.assignedTo != null and ticket.status.name == 'DONE'}">
+                        Исполнил: <span th:text="${ticket.assignedTo.username}"></span>
+                    </div>
                     <div class="ticket-user" th:if="${ticket.assignedTo != null and ticket.status.name == 'ACTIVE'}">
                         Назначен: <span th:text="${ticket.assignedTo != null} ? ${ticket.assignedTo.username} : 'Не назначен'"></span>
+                    </div>
+
+                    <div>
+                        <a class="comments-btn"
+                           th:href="@{/tickets/{id}/comments(id=${ticket.id})}">
+                            Комментарии
+                        </a>
                     </div>
                 </div>
 
@@ -122,6 +178,13 @@
                     </div>
                     <div class="ticket-user" th:if="${ticket.assignedTo != null and ticket.status.name == 'ACTIVE'}">
                         Назначен: <span th:text="${ticket.assignedTo != null} ? ${ticket.assignedTo.username} : 'Не назначен'"></span>
+                    </div>
+
+                    <div>
+                        <a class="comments-btn"
+                           th:href="@{/tickets/{id}/comments(id=${ticket.id})}">
+                            Комментарии
+                        </a>
                     </div>
                 </div>
 

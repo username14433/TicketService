@@ -44,7 +44,15 @@
                     Исполнил: <span th:text="${ticket.assignedTo.username}"></span>
                 </div>
                 <div class="ticket-user" th:if="${ticket.assignedTo != null and ticket.status.name == 'ACTIVE'}">
-                    Назначен: <span th:text="${ticket.assignedTo != null} ? ${ticket.assignedTo.username} : 'Не назначен'"></span>
+                    Назначен: <span
+                        th:text="${ticket.assignedTo != null} ? ${ticket.assignedTo.username} : 'Не назначен'"></span>
+                </div>
+                <!-- Кнопка комментариев -->
+                <div>
+                    <a class="comments-btn"
+                       th:href="@{/tickets/{id}/comments(id=${ticket.id})}">
+                        Комментарии
+                    </a>
                 </div>
             </div>
 

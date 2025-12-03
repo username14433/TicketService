@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Комментарии</title>
+    <link rel="stylesheet" th:href="@{/css/comments.css}">
+</head>
+<body>
+
+<div class="comments-container">
+
+    <a class="back-btn" th:href="@{/tickets}">Назад</a>
+
+    <h2>Комментарии к тикету</h2>
+
+    <!-- Список комментариев -->
+    <div class="comments-list">
+
+        <div class="comment-item"
+             th:each="comment : ${comments}"
+        th:classappend="${comment.user.id == currentUser.id} ? 'my-comment' : 'other-comment'">
+
+            <form th:if="${comment.user.id == currentUser.id}"
+                  th:action="@{/tickets/{ticketId}/comments/{commentId}/delete(ticketId=${ticket.id}, commentId=${comment.id})}"
+                  method="POST"
+                  class="delete-comment-form">
+
+                <button type="submit" class="delete-btn">
+                    🗑
+                </button>
+            </form>
+
+            <div class="comment-author">
+                <span th:text="${comment.user.username}"></span>
+                <span class="comment-date"
+                      th:text="${#temporals.format(comment.createdAt, 'dd.MM.yyyy HH:mm')}">
+                </span>
+            </div>
+
+            <div class="comment-text">
+                <strong th:text="${comment.message}"></strong>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Форма отправки комментария -->
+    <form class="comment-form"
+          th:action="@{/tickets/{id}/comments/add(id=${ticket.id})}"
+          method="POST">
+
+        <div class="form-group">
+            <label>Ваш комментарий</label>
+            <textarea name="message" required></textarea>
+        </div>
+
+        <button type="submit" class="send-btn">Отправить</button>
+
+    </form>
+
+</div>
+
+</body>
+</html>
