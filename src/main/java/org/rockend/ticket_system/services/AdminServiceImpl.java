@@ -3,7 +3,9 @@ package org.rockend.ticket_system.services;
 import org.rockend.ticket_system.dto.AdminStatisticsDto;
 import org.rockend.ticket_system.entity.enums.StatusType;
 import org.rockend.ticket_system.entity.enums.UserRoles;
+import org.rockend.ticket_system.repositories.TicketRepository;
 import org.rockend.ticket_system.repositories.UserRepository;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -14,28 +16,33 @@ public class AdminServiceImpl implements AdminService {
     private final UserRepository userRepository;
     private final UserServiceImpl userServiceImpl;
     private final TicketServiceImpl ticketServiceImpl;
+    private final TicketRepository ticketRepository;
 
-    public AdminServiceImpl(UserRepository userRepository, UserServiceImpl userServiceImpl, TicketServiceImpl ticketServiceImpl) {
+    public AdminServiceImpl(UserRepository userRepository, UserServiceImpl userServiceImpl, TicketServiceImpl ticketServiceImpl, TicketRepository ticketRepository) {
         this.userRepository = userRepository;
         this.userServiceImpl = userServiceImpl;
         this.ticketServiceImpl = ticketServiceImpl;
+        this.ticketRepository = ticketRepository;
     }
 
+    @Override
     public void changeUserRole(long id, UserRoles newRole) {
         userRepository.changeUserRole(id, newRole);
     }
 
+    @Override
+    @Cacheable(cacheNames = "adminStatistics")
     public AdminStatisticsDto getAdminStatistics() {
         int usersCount = userServiceImpl.getAllUsers().size();
-        int activeTicketsCount = ticketServiceImpl.getAllTickets().stream().filter(
+        int activeTicketsCount = ticketRepository.findAll().stream().filter(
                 ticket -> ticket.getStatus() == StatusType.ACTIVE).toList().size();
-        int doneTicketsCount = ticketServiceImpl.getAllTickets().stream().filter(
+        int doneTicketsCount = ticketRepository.findAll().stream().filter(
                 ticket -> ticket.getStatus() == StatusType.DONE).toList().size();
-        int unassignedTicketsCount = ticketServiceImpl.getAllTickets().stream().filter(
+        int unassignedTicketsCount = ticketRepository.findAll().stream().filter(
                 ticket -> ticket.getAssignedTo() == null).toList().size();
 
         AdminStatisticsDto adminStatisticsDto = new AdminStatisticsDto(
-                usersCount, activeTicketsCount, doneTicketsCount, unassignedTicketsCount
+                unassignedTicketsCount, doneTicketsCount, activeTicketsCount, usersCount
         );
         return adminStatisticsDto;
     }

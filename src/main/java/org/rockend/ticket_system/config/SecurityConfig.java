@@ -1,8 +1,8 @@
 package org.rockend.ticket_system.config;
 
 import org.rockend.ticket_system.entity.enums.UserRoles;
+import org.rockend.ticket_system.exceptions.CustomAccessDeniedHandler;
 import org.rockend.ticket_system.services.CustomUserDetailsService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -17,9 +17,12 @@ import org.springframework.security.web.SecurityFilterChain;
 public class SecurityConfig {
 
     private final CustomUserDetailsService customUserDetailsService;
+    private final CustomAccessDeniedHandler customAccessDeniedHandler;
 
-    public SecurityConfig(CustomUserDetailsService customUserDetailsService) {
+    public SecurityConfig(CustomUserDetailsService customUserDetailsService,
+                          CustomAccessDeniedHandler AccessDeniedHandler) {
         this.customUserDetailsService = customUserDetailsService;
+        this.customAccessDeniedHandler = AccessDeniedHandler;
     }
 
     @Bean
@@ -40,6 +43,8 @@ public class SecurityConfig {
                         .requestMatchers("/executor/**").hasAnyRole(UserRoles.EXECUTOR.name(), UserRoles.ADMIN.name())
                         .anyRequest().authenticated()
                 )
+                .exceptionHandling(
+                        ex -> ex.accessDeniedHandler(customAccessDeniedHandler))
                 .formLogin(form -> form
                         .loginPage("/login")
                         .loginProcessingUrl("/perform_login")

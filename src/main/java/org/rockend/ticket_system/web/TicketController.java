@@ -2,7 +2,6 @@ package org.rockend.ticket_system.web;
 
 import org.rockend.ticket_system.dto.*;
 import org.rockend.ticket_system.entity.Ticket;
-import org.rockend.ticket_system.entity.User;
 import org.rockend.ticket_system.services.TicketServiceImpl;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
@@ -24,7 +23,7 @@ public class TicketController {
 
     @GetMapping
     public String showListTickets(Authentication auth, Model model) {
-        List<Ticket> tickets = ticketServiceImpl.getAllTickets();
+        List<TicketDto> tickets = ticketServiceImpl.getAllTickets();
 
         model.addAttribute("tickets", tickets);
         return "tickets";
@@ -49,13 +48,11 @@ public class TicketController {
     public String showMyTickets(@RequestParam("filter") String filter,
                                 Authentication auth,
                                 Model model) {
-        List<Ticket> tickets = ticketServiceImpl.getAllTickets();
-        System.out.println("tickets: " + tickets);
+        List<TicketDto> tickets = ticketServiceImpl.getAllTickets();
         UserTicketsDto userTickets = ticketServiceImpl.getUserTickets(auth);
-        List<Ticket> createdTickets = userTickets.createdTickets();
-        List<Ticket> completedTickets = userTickets.completedTickets();
-        List<Ticket> assignedTickets = userTickets.assignedTickets();
-        System.out.println("assignedTickets: " + assignedTickets);
+        List<TicketDto> createdTickets = userTickets.getCreatedTickets();
+        List<TicketDto> completedTickets = userTickets.getCompletedTickets();
+        List<TicketDto> assignedTickets = userTickets.getAssignedTickets();
 
         model.addAttribute("tickets", tickets);
         model.addAttribute("filter", filter);
@@ -70,27 +67,27 @@ public class TicketController {
                                     @RequestParam(value = "edit", required = false) Boolean editMode,
                                     Authentication auth,
                                     Model model) {
-        Ticket ticket = ticketServiceImpl.getTicketById(id);
+        TicketDto ticket = ticketServiceImpl.getTicketById(id);
         model.addAttribute("ticket", ticket);
 
         editMode = editMode != null && editMode;
         model.addAttribute("editMode", editMode);
 
-        User currentUser = ((CustomUserDetails)auth.getPrincipal()).getUser();
+        UserBasicDto currentUser = ((CustomUserDetails)auth.getPrincipal()).getUser();
         model.addAttribute("currentUser", currentUser);
         return "user-ticket-details";
     }
 
     @PostMapping("/my/{id}/update")
     public String changeTicketInfo(@PathVariable("id") long id, ChangeTicketInfoDto changeTicketInfoDto) {
-        ticketServiceImpl.changeTicketInfo(id, changeTicketInfoDto.newTitle(), changeTicketInfoDto.newDescription());
+        ticketServiceImpl.changeTicketInfo(id, changeTicketInfoDto.getNewTitle(), changeTicketInfoDto.getNewDescription());
         return "redirect:/tickets/my/" + id;
     }
 
     @PostMapping("/my/{id}/change-status")
     public String changeTicketStatus(ChangeTicketStatusDto changeTicketStatusDto) {
-        ticketServiceImpl.changeTicketStatus(changeTicketStatusDto.id(), changeTicketStatusDto.newStatus());
-        return "redirect:/tickets/my/" + changeTicketStatusDto.id();
+        ticketServiceImpl.changeTicketStatus(changeTicketStatusDto.getId(), changeTicketStatusDto.getNewStatus());
+        return "redirect:/tickets/my/" + changeTicketStatusDto.getId();
     }
 
 

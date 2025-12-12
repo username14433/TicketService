@@ -1,6 +1,7 @@
 package org.rockend.ticket_system.web;
 
 import org.rockend.ticket_system.dto.CustomUserDetails;
+import org.rockend.ticket_system.dto.UserBasicDto;
 import org.rockend.ticket_system.dto.UserStatisticsDto;
 import org.rockend.ticket_system.entity.User;
 import org.rockend.ticket_system.services.UserServiceImpl;
@@ -22,7 +23,7 @@ public class UserProfileController {
 
     @GetMapping
     public String profileMainPage(Authentication auth, Model model) {
-        User user = ((CustomUserDetails) auth.getPrincipal()).getUser();
+        UserBasicDto user = ((CustomUserDetails) auth.getPrincipal()).getUser();
         model.addAttribute("user", user);
 
         UserStatisticsDto userStatistics = userServiceImpl.getUserStatistics(auth);

@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Нет прав доступа</title>
+    <link rel="stylesheet" th:href="@{/css/access-denied-error.css}">
+</head>
+
+<body>
+
+<div class="container">
+
+    <div class="header">
+        <h1>Нет прав доступа</h1>
+    </div>
+
+    <div class="error-content">
+
+        <img src="/images/cat.png" alt="cat" class="cat-img">
+
+        <p class="error-text">
+            Ой! Похоже, вы попытались попасть в раздел, который доступен только администраторам. <br>
+            Но не переживайте, даже котик иногда ошибается 😊
+        </p>
+
+        <a class="back-btn" th:href="@{/tickets}">
+            ⬅ На главную страницу
+        </a>
+
+    </div>
+
+</div>
+
+</body>
+</html>

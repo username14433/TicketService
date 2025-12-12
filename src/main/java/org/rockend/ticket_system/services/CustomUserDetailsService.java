@@ -1,6 +1,7 @@
 package org.rockend.ticket_system.services;
 
 import org.rockend.ticket_system.dto.CustomUserDetails;
+import org.rockend.ticket_system.dto.UserBasicDto;
 import org.rockend.ticket_system.entity.User;
 import org.rockend.ticket_system.repositories.UserRepository;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -19,6 +20,8 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     public UserDetails loadUserByUsername(String username) {
         User user = userRepository.findUserByUsername(username).orElseThrow(() -> new UsernameNotFoundException("Пользователь не найден"));
-        return new CustomUserDetails(user);
+
+        UserBasicDto userDto = UserBasicDto.fromEntity(user);
+        return new CustomUserDetails(userDto, user.getPasswordHash());
     }
 }

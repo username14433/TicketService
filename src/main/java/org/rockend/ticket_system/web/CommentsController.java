@@ -1,10 +1,9 @@
 package org.rockend.ticket_system.web;
 
+import org.rockend.ticket_system.dto.CommentDto;
 import org.rockend.ticket_system.dto.CustomUserDetails;
-import org.rockend.ticket_system.entity.Comment;
-import org.rockend.ticket_system.entity.Ticket;
-import org.rockend.ticket_system.entity.User;
-import org.rockend.ticket_system.services.CommentService;
+import org.rockend.ticket_system.dto.TicketDto;
+import org.rockend.ticket_system.dto.UserBasicDto;
 import org.rockend.ticket_system.services.CommentServiceImpl;
 import org.rockend.ticket_system.services.TicketServiceImpl;
 import org.springframework.security.core.Authentication;
@@ -27,14 +26,14 @@ public class CommentsController {
 
     @GetMapping("/tickets/{id}/comments")
     public String showCommentsPage(@PathVariable("id") long id, Authentication auth, Model model) {
-        List<Comment> comments = commentServiceImpl.getAllCommentsByTicketId(id);
+        List<CommentDto> comments = commentServiceImpl.getAllCommentsByTicketId(id);
         model.addAttribute("comments", comments);
 
-        Ticket ticket = ticketServiceImpl.getTicketById(id);
+        TicketDto ticket = ticketServiceImpl.getTicketById(id);
         model.addAttribute("ticket", ticket);
         System.out.println("Ticket: " + ticket);
 
-        User currentUser = ((CustomUserDetails)auth.getPrincipal()).getUser();
+        UserBasicDto currentUser = ((CustomUserDetails)auth.getPrincipal()).getUser();
         model.addAttribute("currentUser", currentUser);
         return "comments";
     }
@@ -47,7 +46,7 @@ public class CommentsController {
 
     @PostMapping("/tickets/{ticketId}/comments/{commentId}/delete")
     public String deleteComment(@PathVariable("ticketId") long ticketId,  @PathVariable("commentId") long commentId) {
-        commentServiceImpl.deleteComment(commentId);
+        commentServiceImpl.deleteComment(ticketId, commentId);
         return "redirect:/tickets/" + ticketId + "/comments";
     }
 }

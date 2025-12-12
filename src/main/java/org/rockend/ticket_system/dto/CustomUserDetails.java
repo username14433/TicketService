@@ -10,13 +10,15 @@ import java.util.List;
 
 public class CustomUserDetails implements UserDetails {
 
-    private final User user;
+    private final UserBasicDto user;
+    private final String passwordHash;
 
-    public CustomUserDetails(User user) {
+    public CustomUserDetails(UserBasicDto user,  String passwordHash) {
         this.user = user;
+        this.passwordHash = passwordHash;
     }
 
-    public User getUser() {
+    public UserBasicDto getUser() {
         return user;
     }
 
@@ -27,7 +29,7 @@ public class CustomUserDetails implements UserDetails {
 
     @Override
     public String getPassword() {
-        return user.getPasswordHash();
+        return passwordHash;
     }
 
     @Override
@@ -60,7 +62,7 @@ public class CustomUserDetails implements UserDetails {
         return "CustomUserDetails{" +
                 "id=" + user.getId() +
                 "username=" + user.getUsername() +
-                "role=" + user.getRole() +
+                "role=" + user.getRole().name() +
                 '}';
     }
 }

@@ -1,5 +1,6 @@
 package org.rockend.ticket_system.repositories;
 
+import org.rockend.ticket_system.dto.UserBasicDto;
 import org.rockend.ticket_system.entity.Ticket;
 import org.rockend.ticket_system.entity.User;
 import org.rockend.ticket_system.entity.enums.StatusType;
@@ -35,8 +36,8 @@ public interface TicketRepository extends JpaRepository<Ticket, Integer> {
                           @Param("updatedAt") LocalDateTime updatedAt);
 
     @Modifying
-    @Query("UPDATE Ticket t SET t.assignedTo = :executor WHERE t.id = :ticketId")
-    void assignTicket(@Param("ticketId") long ticketId, @Param("executor") User executor);
+    @Query("UPDATE Ticket t SET t.assignedTo.id = :executorId WHERE t.id = :ticketId")
+    void assignTicket(@Param("ticketId") long ticketId, @Param("executorId") long executorId);
 
     @Query("SELECT t FROM Ticket t JOIN User u ON t.assignedTo.id = u.id WHERE u.id = :id")
     List<Ticket> findAssignedTicketsByUserId(@Param("id") long id);

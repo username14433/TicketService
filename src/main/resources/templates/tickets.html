@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" lang="ru">
 <head>
     <meta charset="UTF-8">
     <title>Тикеты</title>
@@ -28,9 +28,9 @@
 
                 <div class="ticket-meta">
                     <span th:text="${ticket.status}"></span>
-                    <span th:text="${#temporals.format(ticket.createdAt, 'dd.MM.yyyy HH:mm:ss')}"></span>
+                    <span th:text="${#temporals.format(ticket.createdAt, 'dd.MM.yyyy HH:mm')}"></span>
                     <span th:if="${ticket.status.name == 'DONE'}">
-                Completed at [[${#temporals.format(ticket.updatedAt, 'dd.MM.yyyy HH:mm:ss')}]]
+                Completed at [[${#temporals.format(ticket.updatedAt, 'dd.MM.yyyy HH:mm')}]]
             </span>
                 </div>
             </div>
