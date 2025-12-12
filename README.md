@@ -44,8 +44,7 @@ src/
 │ ├── config/ // Файлы конфигурации: Security Config, Redis Config, Bean Config  
 │ ├── web/ // MVC и REST контроллеры  
 │ ├── service/ // Бизнес-логика  
-│ ├── repositories/ // JPA-репозитории  
-│ ├── model/ // Сущности Hibernate: User, Ticket, Role и др.  
+│ ├── repositories/ // JPA-репозитории   
 │ ├── entity/ // Сущности для создания таблиц в БД  
 │ │   └── enums/ Enum классы UserRoles и StatusType  
 │ ├── exceptions/ // Классы специальных ошибок  
